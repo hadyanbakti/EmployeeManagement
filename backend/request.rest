@@ -1,0 +1,87 @@
+### Register User Baru
+POST http://localhost:5000/register
+Content-Type: application/json
+
+{
+  "username": "leon2",
+  "password": "123456",
+  "confrimPassword": "123456"
+}
+
+### Login User
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+  "username": "hadyan",
+  "password": "hadyan"
+}
+
+### Get All Users (Butuh Token jika pakai auth)
+GET http://localhost:5000/users
+# Authorization: Bearer ACCESS_TOKEN_VALUE
+
+### Get User by ID
+GET http://localhost:5000/users/1
+# Authorization: Bearer ACCESS_TOKEN_VALUE
+
+### Tambah User (dengan foto, multipart/form-data)
+POST http://localhost:5000/users
+# Authorization: Bearer ACCESS_TOKEN_VALUE
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="nama"
+
+Budi
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="nip"
+
+123456
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="departementId"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="foto"; filename="foto.jpg"
+Content-Type: image/jpeg
+
+< ./foto.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Edit User (PATCH, tanpa foto)
+PATCH http://localhost:5000/users/1
+Content-Type: application/json
+# Authorization: Bearer ACCESS_TOKEN_VALUE
+
+{
+  "nama": "Budi Update",
+  "nip": "654321",
+  "departementId": 2
+}
+
+### Hapus User
+DELETE http://localhost:5000/users/1
+# Authorization: Bearer ACCESS_TOKEN_VALUE
+
+### Ambil semua departemen
+GET http://localhost:5000/departements
+
+### Tambah departemen baru
+POST http://localhost:5000/departements
+Content-Type: application/json
+
+{
+  "name": "Human Resource"
+}
+
+### Edit departemen (ganti :id dengan id departemen)
+PATCH http://localhost:5000/departements/1
+Content-Type: application/json
+
+{
+  "name": "IT"
+}
+
+### Hapus departemen (ganti :id dengan id departemen)
+DELETE http://localhost:5000/departements/1
