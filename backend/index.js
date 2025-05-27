@@ -21,7 +21,7 @@ const port = process.env.PORT || 5000;
 
 // Konfigurasi CORS yang benar untuk mengizinkan kredensial
 app.use(cors({
-    origin: 'http://localhost:3000',  // Frontend
+    origin: 'https://tugasakhirtcc-fe-dot-e-09-450704.uc.r.appspot.com/',  // Frontend
     credentials: true, // Izinkan pengiriman cookies
 }));
 
