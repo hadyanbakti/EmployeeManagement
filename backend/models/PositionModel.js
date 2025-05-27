@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
-import db from "../config/Database.js";  // Pastikan path ini benar
+import db from "../config/Database.js";  
 
 const Position = db.define(
-  "position",  // Nama tabel dalam bentuk singular
+  "position",  
   {
     id: {
       type: DataTypes.INTEGER,
@@ -12,12 +12,12 @@ const Position = db.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: false,  // Posisi tidak perlu unik
+      unique: false,  
     },
   },
   {
-    freezeTableName: true,  // Menggunakan nama tabel tanpa pluralisasi otomatis
-    timestamps: false,      // Menonaktifkan createdAt dan updatedAt jika tidak diperlukan
+    freezeTableName: true,  
+    timestamps: false,     
   }
 );
 

@@ -18,14 +18,13 @@ Login.hasMany(User, { foreignKey: "addedByUserId", as: "addedBy" });
     await db.authenticate();
     console.log("✅ Koneksi database berhasil!");
     
-    // Sync database with alter option instead of force
+  
     await db.sync({ alter: true });
     console.log("✅ Semua tabel berhasil disinkronisasi.");
 
-    // Check if we need to create initial data
     const departmentCount = await Department.count();
     if (departmentCount === 0) {
-      // Create initial departments
+     
       await Department.bulkCreate([
         { name: "IT" },
         { name: "HR" },
@@ -37,7 +36,7 @@ Login.hasMany(User, { foreignKey: "addedByUserId", as: "addedBy" });
 
     const positionCount = await Position.count();
     if (positionCount === 0) {
-      // Create initial positions
+     
       await Position.bulkCreate([
         { name: "Manager" },
         { name: "Supervisor" },

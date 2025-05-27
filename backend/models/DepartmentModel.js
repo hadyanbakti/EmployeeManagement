@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../config/Database.js";
 
 const Department = db.define(
-  "department",  // Mengubah nama tabel menjadi singular dan lebih konsisten
+  "department",  
   {
     id: {
       type: DataTypes.INTEGER,
@@ -12,12 +12,12 @@ const Department = db.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,  // Setiap department akan memiliki nama yang unik
+      unique: true, 
     },
   },
   {
-    freezeTableName: true,  // Menonaktifkan pluralisasi otomatis pada nama tabel
-    timestamps: false,  // Menonaktifkan otomatis createdAt dan updatedAt
+    freezeTableName: true, 
+    timestamps: false,  
   }
 );
 
