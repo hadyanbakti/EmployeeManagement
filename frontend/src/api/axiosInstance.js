@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api", // Adjust the base URL as needed
+  baseURL: "https://tugasakhirtcc-436215937980.us-central1.run.app/api", // Adjust the base URL as needed
   withCredentials: true,
 });
 
