@@ -1,127 +1,194 @@
 import React, { useState, useEffect, useCallback } from "react";
-import useAxiosInterceptor from "../api/axiosInterceptor"; // PENTING: Import custom hook ini
+import useAxiosInterceptor from "../api/axiosInterceptor";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "../auth/useAuth"; // Import useAuth untuk penanganan error logout
+import { useAuth } from "../auth/useAuth";
+import Navbar from "./Navbar";
 
 const EditUser = () => {
-  // State variables untuk input form
-  const [name, setName] = useState("");
-  const [title, setTitle] = useState("");
-  const [isiNotes, setIsiNotes] = useState("");
-  const [msg, setMsg] = useState(""); // State untuk pesan error/informasi, jika diperlukan untuk update error
+  const [nama, setNama] = useState("");
+  const [nip, setNip] = useState("");
+  const [departmentId, setDepartmentId] = useState("");
+  const [positionId, setPositionId] = useState("");
+  const [foto, setFoto] = useState("");
+  const [departments, setDepartments] = useState([]);
+  const [positions, setPositions] = useState([]);
+  const [msg, setMsg] = useState("");
 
   const navigate = useNavigate();
-  const { id } = useParams(); // Mengambil ID dari URL
-  // Panggil useAxiosInterceptor untuk mendapatkan instance Axios yang sudah diatur
+  const { id } = useParams();
   const axiosJWT = useAxiosInterceptor();
-  // Gunakan useAuth untuk mengakses setAuth, yang diperlukan untuk menghapus status auth jika token tidak valid
   const { setAuth } = useAuth();
 
-  // useCallback untuk membungkus fungsi yang akan digunakan di useEffect
   const getUserById = useCallback(async () => {
     try {
-      // PENTING: Gunakan 'axiosJWT' untuk permintaan GET yang memerlukan autentikasi
-      const response = await axiosJWT.get(`/users/${id}`); // Endpoint untuk mendapatkan user berdasarkan ID
-      setName(response.data.name);
-      setTitle(response.data.title);
-      setIsiNotes(response.data.isi_notes);
+      const response = await axiosJWT.get(`/users/${id}`);
+      const { nama, nip, departmentId, positionId, foto } = response.data;
+      setNama(nama);
+      setNip(nip);
+      setDepartmentId(departmentId);
+      setPositionId(positionId);
+      setFoto(foto);
     } catch (error) {
       console.error("Error fetching user:", error);
-   
       if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-        setAuth(null); 
-        navigate("/login"); 
+        setAuth(null);
+        navigate("/login");
+      } else {
+        setMsg(error.response?.data?.msg || "Gagal mengambil data karyawan");
       }
-  
     }
-  }, [id, axiosJWT, navigate, setAuth]); 
-
+  }, [id, axiosJWT, navigate, setAuth]);
 
   useEffect(() => {
     getUserById();
-  }, [getUserById]); 
+    
+    const fetchDepartments = async () => {
+      try {
+        const res = await axiosJWT.get("/departments");
+        setDepartments(res.data);
+      } catch (err) {
+        setMsg("Gagal mengambil data departemen");
+      }
+    };
+    
+    const fetchPositions = async () => {
+      try {
+        const res = await axiosJWT.get("/positions");
+        setPositions(res.data);
+      } catch (err) {
+        setMsg("Gagal mengambil data posisi");
+      }
+    };
+
+    fetchDepartments();
+    fetchPositions();
+  }, [getUserById, axiosJWT]);
 
   const updateUser = async (e) => {
     e.preventDefault();
-    setMsg(""); // Bersihkan pesan error sebelumnya
+    setMsg("");
 
-    if (!name || !title || !isiNotes) {
-      setMsg("Semua kolom harus diisi");
+    if (!nama || !nip || !departmentId || !positionId) {
+      setMsg("Nama, NIP, Departemen, dan Posisi wajib diisi");
       return;
     }
 
     try {
-    
-      await axiosJWT.patch(`/users/${id}`, { 
-        name,
-        title,
-        isi_notes: isiNotes,
+      await axiosJWT.patch(`/users/${id}`, {
+        nama,
+        nip,
+        departmentId,
+        positionId,
+        foto,
       });
-      navigate("/users"); 
+      navigate("/users");
     } catch (error) {
       console.error("Error updating user:", error);
-      // Tangani error 401 (Unauthorized) atau 403 (Forbidden)
       if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-        setAuth(null); 
-        navigate("/login"); 
+        setAuth(null);
+        navigate("/login");
       } else {
-       
-        setMsg(error.response?.data?.msg || "Gagal memperbarui catatan. Silakan coba lagi.");
+        setMsg(error.response?.data?.msg || "Gagal memperbarui data karyawan.");
       }
     }
   };
 
   return (
-    <div className="columns mt-5 is-centered">
-      <div className="column is-half">
-        <form onSubmit={updateUser}>
-          {}
-          {msg && <p className="has-text-danger mb-4">{msg}</p>}
+    <div>
+      <Navbar />
+      <div className="columns mt-5 is-centered">
+        <div className="column is-half">
+          <form onSubmit={updateUser}>
+            {msg && <p className="has-text-danger mb-4">{msg}</p>}
 
-          <div className="field">
-            <label className="label">Name</label>
-            <div className="control">
-              <input
-                type="text"
-                className="input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
-              />
+            <div className="field">
+              <label className="label">Nama</label>
+              <div className="control">
+                <input
+                  type="text"
+                  className="input"
+                  value={nama}
+                  onChange={(e) => setNama(e.target.value)}
+                  placeholder="Nama"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="field">
-            <label className="label">Title</label>
-            <div className="control">
-              <input
-                type="text"
-                className="input"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Title"
-              />
+            <div className="field">
+              <label className="label">NIP</label>
+              <div className="control">
+                <input
+                  type="text"
+                  className="input"
+                  value={nip}
+                  onChange={(e) => setNip(e.target.value)}
+                  placeholder="Nomor Induk Pegawai"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="field">
-            <label className="label">Notes</label>
-            <div className="control">
-              <textarea
-                className="textarea"
-                value={isiNotes}
-                onChange={(e) => setIsiNotes(e.target.value)}
-                placeholder="Enter notes here"
-              ></textarea>
+            <div className="field">
+              <label className="label">Departemen</label>
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select value={departmentId} onChange={(e) => setDepartmentId(e.target.value)}>
+                    <option value="">Pilih Departemen</option>
+                    {departments.map((dep) => (
+                      <option key={dep.id} value={dep.id}>{dep.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div className="field">
-            <button type="submit" className="button is-success">
-              Update
-            </button>
-          </div>
-        </form>
+            <div className="field">
+              <label className="label">Posisi</label>
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select value={positionId} onChange={(e) => setPositionId(e.target.value)}>
+                    <option value="">Pilih Posisi</option>
+                    {positions.map((pos) => (
+                      <option key={pos.id} value={pos.id}>{pos.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="field">
+              <label className="label">URL Foto</label>
+              <div className="control">
+                <input
+                  type="url"
+                  className="input"
+                  value={foto}
+                  onChange={(e) => setFoto(e.target.value)}
+                  placeholder="Masukkan URL foto (opsional)"
+                />
+              </div>
+              {foto && (
+                <div className="mt-2">
+                  <img 
+                    src={foto} 
+                    alt="Preview" 
+                    style={{ 
+                      maxWidth: "200px", 
+                      maxHeight: "200px", 
+                      objectFit: "cover",
+                      borderRadius: "4px"
+                    }} 
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="field">
+              <button type="submit" className="button is-success">
+                Update
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ export const LoginUser = async (req, res) => {
     }
 
     const userId = user.id;
-    const username = user.username; // Username ini yang perlu dikirim
+    const username = user.username;
 
     console.log("User authenticated:", username);
 
@@ -62,8 +62,7 @@ export const LoginUser = async (req, res) => {
     });
 
     console.log("Sending successful login response with accessToken:", accessToken, "and username:", username);
-    // PERBAIKAN PENTING: Kirimkan accessToken DAN username
-    res.json({ accessToken, username }); // <-- PERBAIKAN DI SINI!
+    res.json({ accessToken, username, userId });
 
   } catch (error) {
     console.error("Login Error:", error.message);

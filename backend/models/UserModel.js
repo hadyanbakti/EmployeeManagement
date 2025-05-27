@@ -1,5 +1,8 @@
 import { DataTypes } from "sequelize";
 import db from "../config/Database.js";
+import Position from "./PositionModel.js";
+import Login from "./LoginModel.js";
+import Department from "./DepartmentModel.js";
 
 const User = db.define(
   "users",
@@ -19,14 +22,30 @@ const User = db.define(
       unique: true,
     },
     foto: {
-      type: DataTypes.STRING, // path atau url file foto
+      type: DataTypes.STRING,
       allowNull: true,
     },
-    departementId: {
+    departmentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: Department,
+        key: "id",
+      },
+    },
+    positionId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "departement",
+        model: Position,
+        key: "id",
+      },
+    },
+    addedByUserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Login,
         key: "id",
       },
     },
@@ -36,5 +55,14 @@ const User = db.define(
     timestamps: false,
   }
 );
+
+// Relasi antar model
+User.belongsTo(Position, { foreignKey: "positionId" });
+User.belongsTo(Department, { foreignKey: "departmentId" });
+User.belongsTo(Login, { foreignKey: "addedByUserId", as: "addedByUser" });
+
+Position.hasMany(User, { foreignKey: "positionId" });
+Department.hasMany(User, { foreignKey: "departmentId" });
+Login.hasMany(User, { foreignKey: "addedByUserId", as: "addedByUser" });
 
 export default User;

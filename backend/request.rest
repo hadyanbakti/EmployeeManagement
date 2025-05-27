@@ -1,87 +1,112 @@
-### Register User Baru
-POST http://localhost:5000/register
+### Register User
+POST http://localhost:5000/api/register
 Content-Type: application/json
 
 {
-  "username": "leon2",
-  "password": "123456",
-  "confrimPassword": "123456"
+  "username": "john_doe",
+  "password": "password123",
+  "confPassword": "password123"
 }
 
 ### Login User
-POST http://localhost:5000/login
+POST http://localhost:5000/api/login
 Content-Type: application/json
 
 {
-  "username": "hadyan",
-  "password": "hadyan"
+  "username": "john_doe",
+  "password": "password123"
 }
 
-### Get All Users (Butuh Token jika pakai auth)
-GET http://localhost:5000/users
-# Authorization: Bearer ACCESS_TOKEN_VALUE
+### Get All Users (Requires Authorization)
+GET http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiam9obl9kb2UiLCJpYXQiOjE3NDgzNDI5NDUsImV4cCI6MTc0ODM0NjU0NX0.Hdx6IATsnN05luoxyWkaV57bUnv9j1Kz5YCSBAO3T5Y
 
-### Get User by ID
-GET http://localhost:5000/users/1
-# Authorization: Bearer ACCESS_TOKEN_VALUE
+### Get User by ID (Requires Authorization)
+GET http://localhost:5000/api/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiam9obl9kb2UiLCJpYXQiOjE3NDgzMzI0MTUsImV4cCI6MTc0ODMzNjAxNX0.6YqXhAlRwM0ldWfUz9bL80CzAPAdwKDIUEL4FF4uHx0
 
-### Tambah User (dengan foto, multipart/form-data)
-POST http://localhost:5000/users
-# Authorization: Bearer ACCESS_TOKEN_VALUE
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="nama"
-
-Budi
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="nip"
-
-123456
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="departementId"
-
-1
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="foto"; filename="foto.jpg"
-Content-Type: image/jpeg
-
-< ./foto.jpg
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-
-### Edit User (PATCH, tanpa foto)
-PATCH http://localhost:5000/users/1
-Content-Type: application/json
-# Authorization: Bearer ACCESS_TOKEN_VALUE
-
-{
-  "nama": "Budi Update",
-  "nip": "654321",
-  "departementId": 2
-}
-
-### Hapus User
-DELETE http://localhost:5000/users/1
-# Authorization: Bearer ACCESS_TOKEN_VALUE
-
-### Ambil semua departemen
-GET http://localhost:5000/departements
-
-### Tambah departemen baru
-POST http://localhost:5000/departements
+### Create New User (Requires Authorization)
+POST http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiam9obl9kb2UiLCJpYXQiOjE3NDgzMzI0MTUsImV4cCI6MTc0ODMzNjAxNX0.6YqXhAlRwM0ldWfUz9bL80CzAPAdwKDIUEL4FF4uHx0
 Content-Type: application/json
 
 {
-  "name": "Human Resource"
+  "nama": "Jane Doe",
+  "nip": "12345678",
+  "departementId": 1,
+  "positionId": 1,  
+  "userId": 1
 }
 
-### Edit departemen (ganti :id dengan id departemen)
-PATCH http://localhost:5000/departements/1
+
+### Update User (Requires Authorization)
+PATCH http://localhost:5000/api/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiam9obl9kb2UiLCJpYXQiOjE3NDgzMzI0MTUsImV4cCI6MTc0ODMzNjAxNX0.6YqXhAlRwM0ldWfUz9bL80CzAPAdwKDIUEL4FF4uHx0
+Content-Type: application/json
+
+{
+  "nama": "Jane Smith",
+  "nip": "87654321",
+  "departementId": 1,
+  "positionId": 1
+}
+
+### Delete User (Requires Authorization)
+DELETE http://localhost:5000/api/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiam9obl9kb2UiLCJpYXQiOjE3NDgzMzI0MTUsImV4cCI6MTc0ODMzNjAxNX0.6YqXhAlRwM0ldWfUz9bL80CzAPAdwKDIUEL4FF4uHx0
+
+### Create Department
+POST http://localhost:5000/api/departments
 Content-Type: application/json
 
 {
   "name": "IT"
 }
 
-### Hapus departemen (ganti :id dengan id departemen)
-DELETE http://localhost:5000/departements/1
+### Get All Departments
+GET http://localhost:5000/api/departments
+
+### Get Department by ID
+GET http://localhost:5000/api/departments/1
+
+### Update Department
+PATCH http://localhost:5000/api/departments/1
+Content-Type: application/json
+
+{
+  "name": "Human Resources"
+}
+
+### Delete Department
+DELETE http://localhost:5000/api/departments/1
+
+### Create Position
+POST http://localhost:5000/api/positions
+Content-Type: application/json
+
+{
+  "name": "Software Engineer"
+}
+
+### Get All Positions
+GET http://localhost:5000/api/positions
+
+### Get Position by ID
+GET http://localhost:5000/api/positions/1
+
+### Update Position
+PATCH http://localhost:5000/api/positions/1
+Content-Type: application/json
+
+{
+  "name": "Senior Software Engineer"
+}
+
+### Delete Position
+DELETE http://localhost:5000/api/positions/1
+
+### Update Department Table (Ensure foreign key constraints and relationships)
+# This request is to set up relationships for department (adding department_id as a foreign key in users).
+# This would typically be handled in the database setup using migrations but you can define this in a manual query or setup.
+
+

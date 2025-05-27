@@ -25,8 +25,16 @@ const Login = () => {
 
     try {
       const res = await axiosInstance.post("/login", { username, password });
-      setAuth({ username: res.data.username, accessToken: res.data.accessToken });
-      console.log("Login.js: setAuth dipanggil dengan:", { username: res.data.username, accessToken: res.data.accessToken });
+      setAuth({ 
+        username: res.data.username, 
+        accessToken: res.data.accessToken,
+        userId: res.data.userId 
+      });
+      console.log("Login.js: setAuth dipanggil dengan:", { 
+        username: res.data.username, 
+        accessToken: res.data.accessToken,
+        userId: res.data.userId 
+      });
       navigate("/users");
     } catch (err) {
       // More robust error handling

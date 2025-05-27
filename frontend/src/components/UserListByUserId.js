@@ -4,16 +4,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import Navbar from "./Navbar";
 
-const UserList = () => {
+const UserListByUserId = () => {
   const [users, setUsers] = useState([]);
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
   const axiosJWT = useAxiosInterceptor();
 
   const getUsers = useCallback(async () => {
+    if (!auth?.userId) {
+      console.log("No userId found in auth state");
+      setAuth(null);
+      navigate("/login");
+      return;
+    }
+
     try {
-      const response = await axiosJWT.get("/users");
-      console.log("Users data:", response.data); // Untuk debugging
+      console.log("Fetching users for creator ID:", auth.userId);
+      const response = await axiosJWT.get(`/users/by-creator/${auth.userId}`);
+      console.log("Users data:", response.data);
       setUsers(response.data);
     } catch (error) {
       console.log("Error fetching users:", error);
@@ -22,7 +30,7 @@ const UserList = () => {
         navigate("/login");
       }
     }
-  }, [axiosJWT, setAuth, navigate]);
+  }, [axiosJWT, setAuth, navigate, auth?.userId]);
 
   useEffect(() => {
     getUsers();
@@ -51,7 +59,7 @@ const UserList = () => {
               Add New
             </Link>
           </div>
-          <h1 className="title is-4 mb-4">Daftar Semua Karyawan</h1>
+          <h1 className="title is-4 mb-4">Daftar Karyawan Yang Anda Tambahkan</h1>
           <table className="table is-striped is-fullwidth">
             <thead>
               <tr>
@@ -60,7 +68,6 @@ const UserList = () => {
                 <th>NIP</th>
                 <th>Departemen</th>
                 <th>Posisi</th>
-                <th>Ditambahkan Oleh</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -73,7 +80,6 @@ const UserList = () => {
                     <td>{user.nip}</td>
                     <td>{user.department?.name || 'Tidak ada departemen'}</td>
                     <td>{user.position?.name || 'Tidak ada posisi'}</td>
-                    <td>{user.addedByUser?.username || '-'}</td>
                     <td>
                       <div className="buttons">
                         <Link to={`/users/edit/${user.id}`} className="button is-small is-info">
@@ -94,7 +100,7 @@ const UserList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="has-text-centered">Tidak ada karyawan untuk ditampilkan.</td>
+                  <td colSpan="6" className="has-text-centered">Tidak ada karyawan untuk ditampilkan.</td>
                 </tr>
               )}
             </tbody>
@@ -105,4 +111,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default UserListByUserId;
