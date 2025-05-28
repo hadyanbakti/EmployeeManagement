@@ -3,12 +3,15 @@ service: tugasakhirtcc-fe
 instance_class: F1
 
 handlers:
-  - url: /
+  # Serve static files
+  - url: /(.*\.(json|ico|js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot))$
+    static_files: build/\1
+    upload: build/.*\.(json|ico|js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$
+
+  # All other routes should serve index.html
+  - url: /.*
     static_files: build/index.html
     upload: build/index.html
-
-  - url: /(.*)
-    static_files: build/\1
-    upload: build/(.*)
+    secure: always
 
 default_expiration: "1h"

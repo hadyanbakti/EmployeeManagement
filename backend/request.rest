@@ -8,8 +8,17 @@ Content-Type: application/json
   "confPassword": "password123"
 }
 
+### Register User
+POST https://tugasakhirtcc-436215937980.us-central1.run.app/api/register
+Content-Type: application/json
+{
+  "username": "john_doe",
+  "password": "password123",
+  "confPassword": "password123"
+}
+
 ### Login User
-POST http://localhost:5000/api/login
+POST https://tugasakhirtcc-436215937980.us-central1.run.app/api/login
 Content-Type: application/json
 
 {
