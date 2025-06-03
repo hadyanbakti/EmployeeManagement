@@ -21,7 +21,7 @@ const port = process.env.PORT || 5000;
 
 
 app.use(cors({
-    origin: 'https://tugasakhirtcc-fe-dot-e-09-450704.uc.r.appspot.com',  
+    origin: 'http://localhost:3000',  
     credentials: true,
 }));
 
